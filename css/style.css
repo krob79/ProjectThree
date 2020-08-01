@@ -80,6 +80,10 @@ label {
 	margin-bottom: .5em;
 }
 
+.disabled{
+    color: #999;
+}
+
 input,
 select {
 	margin-bottom: 1.125em;	
