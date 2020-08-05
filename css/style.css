@@ -99,6 +99,15 @@ input {
 	outline: none;
 }
 
+.inputerror{
+    border: 2px solid rgb(252, 61, 3);
+    background: #ffc0ad;
+    transition: border-color .4s, background-color .4s;
+}
+.inputerrortext{
+    color: rgb(252, 61, 3);
+}
+
 input:focus {
 	background: #fff;
 	border-color: #5e97b0;
