@@ -1,4 +1,4 @@
-//get the focus for the first line on the form 
+//get the focus for the first line on the form, per the project requirements
 const input_name = document.getElementById("name");
 input_name.focus();
 
