@@ -1,22 +1,13 @@
 //get the focus for the first line on the form 
 const input_name = document.getElementById("name");
 input_name.focus();
-//input_name.addEventListener("blur", (e) => {
-//  validateName(e.target.value);  
-//})
 
 const input_email = document.getElementById("mail");
-//input_email.addEventListener("blur", (e) => {
-//  validateEmail(e.target.value);
-//})
 
 const name_msg = document.createElement("label");
 name_msg.textContent = "Please enter your name.";
 
-
 const submitBtn = document.getElementsByTagName('button')[0];
-
-
 
 //hide elements for 'other' option until we need them
 const input_other = document.getElementById("other-title");
@@ -306,33 +297,36 @@ const paypal_display = document.getElementById("paypal");
 const bitcoin_display = document.getElementById("bitcoin");
 const select_payment = document.getElementById("payment");
 select_payment.value = "credit card";
+
+//inserting error message labels into the DOM
 let error_msg = document.createElement("label");
 error_msg.className = "inputerrortext";
 submitBtn.parentNode.insertBefore(error_msg, submitBtn);
 
+//inserting error message labels into the DOM
 let error_msg_name = document.createElement("label");
 error_msg_name.textContent = "";
 error_msg_name.className = "inputerrortext";
 input_name.parentNode.insertBefore(error_msg_name, input_name);
 
+//inserting error message labels into the DOM
 let error_msg_email = document.createElement("label");
 error_msg_email.textContent = "";
 error_msg_email.className = "inputerrortext";
 input_email.parentNode.insertBefore(error_msg_email, input_email);
 
-
+//inserting error message labels into the DOM
 let error_msg_activities = document.createElement("label");
 error_msg_activities.textContent = "";
 error_msg_activities.className = "inputerrortext";
 fieldset_activities_inputs[0].parentNode.parentNode.insertBefore(error_msg_activities, fieldset_activities_inputs[0].parentNode);
 
+//inserting error message labels into the DOM
 let error_msg_payment = document.createElement("label");
 error_msg_payment.textContent = "";
 error_msg_payment.className = "inputerrortext";
 const label_payment = document.querySelector("label[for='payment']");
 label_payment.parentNode.insertBefore(error_msg_payment,label_payment);
-
-
 
 populateDropDown(select_payment, paymentOptions, "payment");
 
@@ -343,13 +337,16 @@ select_payment.addEventListener('change', (e) => {
         displayPaymentMethod(e.target.value);
 });
 
+//hides any payment method that is not selected
 function displayPaymentMethod(method){
     card_display.style.display = "none";
+    error_msg_payment.style.display = "none";
     paypal_display.style.display = "none";
     bitcoin_display.style.display = "none";
     switch(method){
         case "credit card":
            card_display.style.display = "block";
+           error_msg_payment.style.display = "block";
            break;
         case "paypal":
            paypal_display.style.display = "block";
@@ -360,6 +357,7 @@ function displayPaymentMethod(method){
     }
 }
 
+//code for continuous validation after each keystroke
 input_name.onkeyup = validateName;
 input_email.onkeyup = validateEmail;
 input_creditCard.onkeyup = validateCreditCard;
@@ -368,6 +366,7 @@ input_zipcode.onkeyup = validateZipcode;
 
 let flag = 0;
 
+//validates name field
 function validateName(){
     let name = input_name.value;
     let nameRegEx = /^[A-Za-z]+$/;
@@ -382,6 +381,7 @@ function validateName(){
     }
 }
 
+//validates email field
 function validateEmail(){
     let email = input_email.value;
     let emailRegEx = /^[a-zA-Z0-9.!#$%&’*+\=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/;
@@ -399,7 +399,8 @@ function validateEmail(){
         error_msg_email.textContent = "";
     }
 }
-    
+
+//validates activity checkboxes
 function validateActivity(){
     if(selectedEvents.length < 1){
         flag++;
@@ -409,6 +410,7 @@ function validateActivity(){
     }
 }
 
+//validates credit card field
 function validateCreditCard(){
     let ccRegEx = /\d{13,16}/;
     let creditCard = input_creditCard.value;
@@ -426,6 +428,7 @@ function validateCreditCard(){
     }
 }
 
+//validates CVV field
 function validateCVV(){
     let cvvRegEx = /\d{3}/;
     let cvv = input_cvv.value;
@@ -441,6 +444,8 @@ function validateCVV(){
         input_cvv.className = "";
     }
 }
+
+//validates zipcode field
 function validateZipcode(){
     let zipRegEx = /\d{5}/;
     let zipcode = input_zipcode.value;
@@ -457,6 +462,7 @@ function validateZipcode(){
     }
 }
 
+//runs all validation functions and checks for a flag
 function validate(){
     flag = 0;
     error_msg_name.textContent = "";
@@ -487,11 +493,7 @@ function validate(){
 
 submitBtn.addEventListener('click', (e) => {
     if(!validate()){
-        console.log("NOT VALIDATED");
         e.preventDefault();
-    }else{
-        console.log("VALIDATED ON SUBMIT");
     }
-    
 })
 
