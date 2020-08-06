@@ -127,12 +127,19 @@ function populateDropDown(menu, options, type="none"){
     }
 }
 
+const colorOptions = document.getElementById("colors-js-puns");
 const select_color = document.getElementById("color");
 clearDropDown(select_color, "Please select a T-shirt theme");
+colorOptions.style.display = 'none';
 const select_design = document.getElementById("design");
 
 //listen for change event in job title drop down menu
 select_design.addEventListener('change', (e) => {
+    if(e.target.value != "Select Theme"){
+       colorOptions.style.display = 'block';
+    }else{
+        colorOptions.style.display = 'none';
+    }
     //populate drop down based on the value from the theme drop down
     populateDropDown(select_color, colorMenuOptions, e.target.value);
     
@@ -224,6 +231,7 @@ for(let i=0; i < fieldset_activities_inputs.length; i++){
         }else{
             removeFromArray(selectedEvents, "id", i)
         }
+        validateActivity();
         updateEventList();
     })
 }
@@ -302,6 +310,28 @@ let error_msg = document.createElement("label");
 error_msg.className = "inputerrortext";
 submitBtn.parentNode.insertBefore(error_msg, submitBtn);
 
+let error_msg_name = document.createElement("label");
+error_msg_name.textContent = "";
+error_msg_name.className = "inputerrortext";
+input_name.parentNode.insertBefore(error_msg_name, input_name);
+
+let error_msg_email = document.createElement("label");
+error_msg_email.textContent = "";
+error_msg_email.className = "inputerrortext";
+input_email.parentNode.insertBefore(error_msg_email, input_email);
+
+
+let error_msg_activities = document.createElement("label");
+error_msg_activities.textContent = "";
+error_msg_activities.className = "inputerrortext";
+fieldset_activities_inputs[0].parentNode.parentNode.insertBefore(error_msg_activities, fieldset_activities_inputs[0].parentNode);
+
+let error_msg_payment = document.createElement("label");
+error_msg_payment.textContent = "";
+error_msg_payment.className = "inputerrortext";
+const label_payment = document.querySelector("label[for='payment']");
+label_payment.parentNode.insertBefore(error_msg_payment,label_payment);
+
 
 
 populateDropDown(select_payment, paymentOptions, "payment");
@@ -330,88 +360,125 @@ function displayPaymentMethod(method){
     }
 }
 
-function validateName(name){
+input_name.onkeyup = validateName;
+input_email.onkeyup = validateEmail;
+input_creditCard.onkeyup = validateCreditCard;
+input_cvv.onkeyup = validateCVV;
+input_zipcode.onkeyup = validateZipcode;
+
+let flag = 0;
+
+function validateName(){
+    let name = input_name.value;
     let nameRegEx = /^[A-Za-z]+$/;
     console.log("NAME MATCH: " + (name.match(nameRegEx) != null));   
-    return (name.match(nameRegEx) != null);
+    if(!name.match(nameRegEx)){
+        flag++;
+        error_msg_name.textContent = "Name field can not be blank and must only contain letters.";
+        input_name.className = "inputerror";
+    }else{
+        error_msg_name.textContent = "";
+        input_name.className = "";
+    }
 }
 
-function validateEmail(email){
+function validateEmail(){
+    let email = input_email.value;
     let emailRegEx = /^[a-zA-Z0-9.!#$%&’*+\=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/;
     console.log("EMAIL MATCH: " + (email.match(emailRegEx) != null));   
-    return (email.match(emailRegEx) != null);
+    if(!email.match(emailRegEx)){
+        flag++;
+        if(input_email.value == ""){
+           error_msg_email.textContent = "Please provide an email address.";
+        }else{
+           error_msg_email.textContent = "Please enter a valid Email address.";
+        }
+        input_email.className = "inputerror";
+    }else{
+        input_email.className = "";
+        error_msg_email.textContent = "";
+    }
 }
     
 function validateActivity(){
-    return (selectedEvents.length < 2);
+    if(selectedEvents.length < 1){
+        flag++;
+        error_msg_activities.textContent = "Please select at least one event.";
+    }else{
+        error_msg_activities.textContent = "";
+    }
 }
 
-function validateCreditCard(creditCard){
+function validateCreditCard(){
     let ccRegEx = /\d{13,16}/;
+    let creditCard = input_creditCard.value;
+    let msg = "Please enter a valid credit card number. ";
     console.log("Validate Credit Card: " + (creditCard.match(ccRegEx) != null));
-    return (creditCard.match(ccRegEx) != null);
+    if(!creditCard.match(ccRegEx)){
+        flag++;
+        if(!error_msg_payment.textContent.includes(msg)){
+           error_msg_payment.textContent += msg;
+        }
+        input_creditCard.className = "inputerror";
+    }else{
+        error_msg_payment.textContent = "";
+        input_creditCard.className = "";
+    }
 }
 
-function validateCVV(cvv){
+function validateCVV(){
     let cvvRegEx = /\d{3}/;
-    return (cvv.match(cvvRegEx) != null);
+    let cvv = input_cvv.value;
+    let msg = "Please enter a valid 3-digit CVV number. "
+    if(!cvv.match(cvvRegEx)){
+        flag++;
+        if(!error_msg_payment.textContent.includes(msg)){
+            error_msg_payment.textContent += msg;
+        }
+        input_cvv.className = "inputerror";
+    }else{
+        error_msg_payment.textContent = "";
+        input_cvv.className = "";
+    }
 }
-function validateZipcode(zipcode){
+function validateZipcode(){
     let zipRegEx = /\d{5}/;
-    return (zipcode.match(zipRegEx) != null);
+    let zipcode = input_zipcode.value;
+    let msg = "Please enter a valid 5-digit zipcode. ";
+    if(!zipcode.match(zipRegEx)){
+        flag++;
+        if(!error_msg_payment.textContent.includes(msg)){
+           error_msg_payment.textContent += msg;
+        }
+        input_zipcode.className = "inputerror";
+    }else{
+        error_msg_payment.textContent = "";
+        input_zipcode.className = "";
+    }
 }
 
 function validate(){
-    let flag = 0;
-    let problems = "";
-    if(!validateName(input_name.value)){
-        flag++;
-        problems += "Name field can not be blank or contain numbers. ";
-        input_name.className = "inputerror";
-    }else{
-        input_name.className = "";
-    }
-    if(!validateEmail(input_email.value)){
-        flag++;
-        problems += "Email address is invalid. ";
-        input_email.className = "inputerror";
-    }
-    if(!validateActivity()){
-        flag++;
-        problems += "One or more events have not been selected. ";
-    }
-    if(select_payment.value == "credit card"){
-        if(!validateCreditCard(input_creditCard.value)){
-            flag++;
-            problems += "Credit card number is invalid. ";
-            input_creditCard.className = "inputerror";
-        }else{
-            input_creditCard.className = "";
-        }
-        if(!validateCVV(input_cvv.value)){
-            flag++;
-            problems += "CVV number is invalid. ";
-            input_cvv.className = "inputerror";
-        }else{
-            input_cvv.className = "";
-        }
-        if(!validateZipcode(input_zipcode.value)){
-            flag++;   
-            problems += "Zipcode is invalid. ";
-            input_zipcode.className = "inputerror";
-        }else{
-            input_zipcode.className = "";
-        }
-    }
+    flag = 0;
+    error_msg_name.textContent = "";
+    error_msg_email.textContent = "";
+    error_msg_activities.textContent = "";
+    error_msg_payment.textContent = "";
+    
+    validateName();
+    validateEmail();
+    validateActivity();
+    validateCreditCard();
+    validateCVV();
+    validateZipcode();
     
     if(flag > 0){
-        
-        let problemPhrase = "There was a problem with your submission. " + problems;
+        let w1 = "is";
+        let w2 = "item";
         if(flag > 1){
-           problemPhrase = "Please check the following items with your submission: " + problems;
+            w1 = "are";
+            w2 = "items";
         }
-        console.log("***"+problemPhrase);
-        error_msg.textContent = problemPhrase;
+        error_msg.textContent = `There ${w1} ${flag} ${w2} above that should be reviewed in your submission.`;
         return false;
     }else{
         return true;
@@ -420,6 +487,7 @@ function validate(){
 
 submitBtn.addEventListener('click', (e) => {
     if(!validate()){
+        console.log("NOT VALIDATED");
         e.preventDefault();
     }else{
         console.log("VALIDATED ON SUBMIT");
