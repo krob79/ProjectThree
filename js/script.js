@@ -412,7 +412,7 @@ function validateActivity(){
 
 //validates credit card field
 function validateCreditCard(){
-    let ccRegEx = /\d{13,16}/;
+    let ccRegEx = /^\d{13,16}$/;
     let creditCard = input_creditCard.value;
     let msg = "Please enter a valid credit card number. ";
     console.log("Validate Credit Card: " + (creditCard.match(ccRegEx) != null));
@@ -430,7 +430,7 @@ function validateCreditCard(){
 
 //validates CVV field
 function validateCVV(){
-    let cvvRegEx = /\d{3}/;
+    let cvvRegEx = /^\d{3}$/;
     let cvv = input_cvv.value;
     let msg = "Please enter a valid 3-digit CVV number. "
     if(!cvv.match(cvvRegEx)){
@@ -447,7 +447,7 @@ function validateCVV(){
 
 //validates zipcode field
 function validateZipcode(){
-    let zipRegEx = /\d{5}/;
+    let zipRegEx = /^\d{5}$/;
     let zipcode = input_zipcode.value;
     let msg = "Please enter a valid 5-digit zipcode. ";
     if(!zipcode.match(zipRegEx)){
@@ -473,9 +473,11 @@ function validate(){
     validateName();
     validateEmail();
     validateActivity();
-    validateCreditCard();
-    validateCVV();
-    validateZipcode();
+    if(select_payment.value == "credit card"){
+        validateCreditCard();
+        validateCVV();
+        validateZipcode();
+    }
     
     if(flag > 0){
         let w1 = "is";
