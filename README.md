@@ -2,6 +2,8 @@
 
 In this project, the focus was on creating interactive forms and form validation. Form fields would display only if certain menu options were chosen and Regular Expressions were used to check if email addresses and other information was filled out correctly.
 
+[View Project](https://krob79.github.io/ProjectThree/)
+
 ## Languages & Tools Used
 ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?logo=javascript&logoColor=blue&style=flat-square)
 ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white&style=flat-square)
